@@ -7,6 +7,8 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.zuzaser.advanceddiary.repository.DiaryRepository
+import com.zuzaser.advanceddiary.room.AdvancedDiaryDatabase
 
 @Entity(tableName = "entries")
 data class DiaryEntryModel(
@@ -16,7 +18,11 @@ data class DiaryEntryModel(
     val entryImage : String,
     val entryVoice : String,
     @Embedded var entryLocation: Location
-) {}
+) {
+    fun getAllImages(database: AdvancedDiaryDatabase) : List<String> {
+        return database.fromString(entryImage)
+    }
+}
 
 class Location {
     var latitude: Double = 0.0

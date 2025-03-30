@@ -14,11 +14,11 @@ interface AdvancedDiaryDao {
     suspend fun add(paletteModel: DiaryEntryModel)
 
     @Query("SELECT * FROM entries")
-    fun getAllPalettes(): LiveData<List<DiaryEntryModel>>
+    fun getAllEntries(): LiveData<List<DiaryEntryModel>>
 
     @Query("DELETE FROM entries")
     fun removeAll()
 
     @Delete
-    fun removePalette(paletteModel: DiaryEntryModel)
+    fun removeEntry(entryModel: DiaryEntryModel)
 }
