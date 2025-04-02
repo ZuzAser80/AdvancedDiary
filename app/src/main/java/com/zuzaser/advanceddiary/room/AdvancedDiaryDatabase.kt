@@ -17,15 +17,6 @@ import com.zuzaser.advanceddiary.model.DiaryEntryModel
 abstract class AdvancedDiaryDatabase : RoomDatabase() {
 
     abstract fun diaryDao() : AdvancedDiaryDao
-    
-    @TypeConverter
-    fun toString(entity: List<String>): String {
-        return Gson().toJson(entity)
-    }
-    @TypeConverter
-    fun fromString(serialized: String): List<String> {
-        return Gson().fromJson<List<String>>(serialized, object : TypeToken<List<String>>(){}.type)
-    }
 
     companion object {
         private var INSTANCE: AdvancedDiaryDatabase? = null

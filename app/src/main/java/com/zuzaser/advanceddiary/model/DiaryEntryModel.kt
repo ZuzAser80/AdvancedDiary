@@ -7,6 +7,9 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.zuzaser.advanceddiary.repository.DiaryRepository
 import com.zuzaser.advanceddiary.room.AdvancedDiaryDatabase
 
@@ -16,11 +19,20 @@ data class DiaryEntryModel(
     val entryText : String,
     //storing only REFERENCES to files instead of BLOBs or some other bs
     val entryImage : String,
-    val entryVoice : String,
     @Embedded var entryLocation: Location
 ) {
-    fun getAllImages(database: AdvancedDiaryDatabase) : List<String> {
-        return database.fromString(entryImage)
+    fun getAllImages() : List<String> {
+        return fromString(entryImage)
+    }
+
+    @TypeConverter
+    fun toString(entity: List<String>): String {
+        return Gson().toJson(entity)
+    }
+
+    @TypeConverter
+    fun fromString(serialized: String): List<String> {
+        return Gson().fromJson<List<String>>(serialized, object : TypeToken<List<String>>(){}.type)
     }
 }
 
