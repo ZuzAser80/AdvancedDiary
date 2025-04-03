@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,11 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.WhitePoint
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.zuzaser.advanceddiary.model.DiaryEntryModel
 import java.io.File
@@ -41,20 +46,42 @@ class DiaryEntryView  {
             ) {
                 Text(diaryEntryModel.entryText)
                 for (i in diaryEntryModel.getAllImages()) {
-                    val imgFile = File(i)
-                    var imgBitmap: Bitmap? = null
-                    if (imgFile.exists()) {
-                        imgBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                    Box(modifier = Modifier
+                        .height(200.dp)
+                        .width(200.dp)
+                        .padding(10.dp),
+
+                        ) {
+                        AsyncImage(
+                            model = i,
+                            contentDescription = "Image",
+
+                            contentScale = ContentScale.Fit
+                        )
                     }
-                    Image(
-                        painter = rememberImagePainter(data = imgBitmap),
-                        contentDescription = "Image",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(10.dp)
-                    )
                 }
+            }
+        }
+    }
+    @Composable
+    fun GetPreview(diaryEntryModel: DiaryEntryModel) {
+        Box(modifier = Modifier
+            .background(Color.Green)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(25.dp))
+        ) {
+            Box(modifier = Modifier
+                .height(200.dp)
+                .width(200.dp)
+                .padding(10.dp),
+
+                ) {
+                AsyncImage(
+                    model = diaryEntryModel.getAllImages()[0],
+                    contentDescription = "Image",
+
+                    contentScale = ContentScale.Fit
+                )
             }
         }
     }
