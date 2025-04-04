@@ -96,7 +96,8 @@ class DiaryEntryCreateView {
                     }
                 }
                 Button(onClick = {
-                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024), it.value, imageData.value.toString(), Location(0.0, 0.0)))
+                    println("IMAGE DATA: " + imageData.value)
+                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024 * 10), it.value, imageData.value.toString(), Location(0.0, 0.0)))
                     onFinish()
                 }, content = { Text(text = "Finish")
                 })

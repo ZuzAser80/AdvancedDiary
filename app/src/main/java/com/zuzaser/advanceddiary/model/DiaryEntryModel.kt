@@ -32,7 +32,8 @@ data class DiaryEntryModel(
 
     @TypeConverter
     fun fromString(serialized: String): List<String> {
-        return Gson().fromJson<List<String>>(serialized, object : TypeToken<List<String>>(){}.type)
+        var r : List<String> = serialized.substring(1, serialized.length - 1).split(", ")
+        return r
     }
 }
 

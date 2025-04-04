@@ -34,6 +34,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.zuzaser.advanceddiary.model.DiaryEntryModel
 import java.io.File
+import kotlin.random.Random
 
 class DiaryEntryView  {
     @Composable
@@ -73,15 +74,17 @@ class DiaryEntryView  {
             Box(modifier = Modifier
                 .height(200.dp)
                 .width(200.dp)
-                .padding(10.dp),
-
+                .padding(10.dp)
+                .background(Color.Magenta),
                 ) {
-                AsyncImage(
-                    model = diaryEntryModel.getAllImages()[0],
-                    contentDescription = "Image",
+                if(diaryEntryModel.getAllImages().isNotEmpty()) {
+                    AsyncImage(
+                        model = diaryEntryModel.getAllImages()[0],
+                        contentDescription = "Image",
 
-                    contentScale = ContentScale.Fit
-                )
+                        contentScale = ContentScale.Fit
+                    )
+                }
             }
         }
     }
