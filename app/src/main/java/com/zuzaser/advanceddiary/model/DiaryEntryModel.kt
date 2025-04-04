@@ -15,7 +15,7 @@ import com.zuzaser.advanceddiary.room.AdvancedDiaryDatabase
 
 @Entity(tableName = "entries")
 data class DiaryEntryModel(
-    @PrimaryKey val id : Int,
+    @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val entryText : String,
     //storing only REFERENCES to files instead of BLOBs or some other bs
     val entryImage : String,
@@ -36,7 +36,7 @@ data class DiaryEntryModel(
     }
 }
 
-class Location {
-    var latitude: Double = 0.0
+class Location (
+    var latitude: Double = 0.0,
     var longitude: Double = 0.0
-}
+)

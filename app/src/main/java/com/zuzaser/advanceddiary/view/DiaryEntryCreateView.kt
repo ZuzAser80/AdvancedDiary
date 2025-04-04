@@ -35,6 +35,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +55,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import com.zuzaser.advanceddiary.model.DiaryEntryModel
+import com.zuzaser.advanceddiary.model.Location
+import com.zuzaser.advanceddiary.repository.DiaryRepository
 import java.io.File
+import kotlin.random.Random
 
 class DiaryEntryCreateView {
-    @Preview(showBackground = true)
     @Composable
-    fun GetView() {
+    fun GetView(diaryRepository: DiaryRepository, onFinish: () -> Unit) {
         var imageData = remember { mutableStateOf<List<Uri>>(emptyList()) }
         val multiplePhotoPicker  =
             rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)) {
@@ -82,19 +86,18 @@ class DiaryEntryCreateView {
                             .height(200.dp)
                             .width(200.dp)
                             .padding(10.dp),
-
                         ) {
                             AsyncImage(
                                 model = i,
                                 contentDescription = "Image",
-
                                 contentScale = ContentScale.Fit
                             )
                         }
                     }
                 }
                 Button(onClick = {
-
+                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024), it.value, imageData.value.toString(), Location(0.0, 0.0)))
+                    onFinish()
                 }, content = { Text(text = "Finish")
                 })
             })
@@ -103,7 +106,7 @@ class DiaryEntryCreateView {
 
     //stolen
     @Composable
-    fun ExpandableText(modifier: Modifier = Modifier, text: String = "", content: @Composable () -> Unit) {
+    fun ExpandableText(modifier: Modifier = Modifier, text: String = "", content: @Composable (textData: MutableState<String>) -> Unit) {
         Column(Modifier.fillMaxSize(), horizontalAlignment =
         Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             var textData = remember { mutableStateOf("") }
@@ -133,12 +136,12 @@ class DiaryEntryCreateView {
                             {textData.value = it},
                             textStyle = TextStyle(fontSize =  28.sp),
                             placeholder = { Text("Entry text here...") },
-                            maxLines = 10
+                            maxLines = 20
                         )
                     }
                 }
             }
-            content()
+            content(textData)
         }
     }
 }
