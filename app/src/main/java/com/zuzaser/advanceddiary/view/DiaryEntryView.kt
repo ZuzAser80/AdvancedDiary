@@ -70,16 +70,17 @@ class DiaryEntryView  {
             .height(200.dp)
             .width(200.dp)
             .padding(10.dp)
-            .background(Color.Magenta),
+            .background(Color.Gray),
         ) {
             if(diaryEntryModel.getAllImages().isNotEmpty()) {
                 AsyncImage(
                     model = diaryEntryModel.getAllImages()[0],
                     contentDescription = "Image",
 
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Crop
                 )
             }
+            Text(diaryEntryModel.entryText.substring(0, if(diaryEntryModel.entryText.length > 20) 20 else diaryEntryModel.entryText.length))
         }
     }
 }
