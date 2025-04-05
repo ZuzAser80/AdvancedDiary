@@ -67,24 +67,18 @@ class DiaryEntryView  {
     @Composable
     fun GetPreview(diaryEntryModel: DiaryEntryModel) {
         Box(modifier = Modifier
-            .background(Color.Green)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(25.dp))
+            .height(200.dp)
+            .width(200.dp)
+            .padding(10.dp)
+            .background(Color.Magenta),
         ) {
-            Box(modifier = Modifier
-                .height(200.dp)
-                .width(200.dp)
-                .padding(10.dp)
-                .background(Color.Magenta),
-                ) {
-                if(diaryEntryModel.getAllImages().isNotEmpty()) {
-                    AsyncImage(
-                        model = diaryEntryModel.getAllImages()[0],
-                        contentDescription = "Image",
+            if(diaryEntryModel.getAllImages().isNotEmpty()) {
+                AsyncImage(
+                    model = diaryEntryModel.getAllImages()[0],
+                    contentDescription = "Image",
 
-                        contentScale = ContentScale.Fit
-                    )
-                }
+                    contentScale = ContentScale.Fit
+                )
             }
         }
     }
