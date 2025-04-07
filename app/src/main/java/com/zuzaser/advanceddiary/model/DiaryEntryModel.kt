@@ -9,9 +9,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.zuzaser.advanceddiary.repository.DiaryRepository
-import com.zuzaser.advanceddiary.room.AdvancedDiaryDatabase
 
 @Entity(tableName = "entries")
 data class DiaryEntryModel(

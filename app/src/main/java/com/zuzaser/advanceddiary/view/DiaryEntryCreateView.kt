@@ -1,6 +1,10 @@
 package com.zuzaser.advanceddiary.view
 
+import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.os.FileUtils
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +39,7 @@ import coil.compose.AsyncImage
 import com.zuzaser.advanceddiary.model.DiaryEntryModel
 import com.zuzaser.advanceddiary.model.Location
 import com.zuzaser.advanceddiary.repository.DiaryRepository
+import com.zuzaser.advanceddiary.util.UriPathFinder
 import kotlin.random.Random
 
 class DiaryEntryCreateView {
@@ -42,6 +48,7 @@ class DiaryEntryCreateView {
         var imageData = remember { mutableStateOf<List<Uri>>(emptyList()) }
         val multiplePhotoPicker  =
             rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)) {
+
                 imageData.value += it
             }
         val scrollState = rememberScrollState()
@@ -70,8 +77,12 @@ class DiaryEntryCreateView {
                         }
                     }
                 }
+                var i = emptyList<String>()
+                for (j in imageData.value) {
+                    i += UriPathFinder().getPath(LocalContext.current, j)!!
+                }
                 Button(onClick = {
-                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024 * 10), it.value, imageData.value.toString(), Location(0.0, 0.0)))
+                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024 * 10), it.value, i.toString(), Location(0.0, 0.0)))
                     onFinish()
                 }, content = { Text(text = "Finish")
                 })
