@@ -11,7 +11,6 @@ class DiaryRepository (private val dao : AdvancedDiaryDao) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addDiaryEntry(diaryEntry : DiaryEntryModel) {
-        println("ADDED ENTRY: " + diaryEntry.id)
         coroutineScope.launch(Dispatchers.IO) {
             dao.add(diaryEntry)
         }

@@ -1,10 +1,6 @@
 package com.zuzaser.advanceddiary.view
 
-import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
-import android.os.FileUtils
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,24 +34,19 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.zuzaser.advanceddiary.model.DiaryEntryModel
 import com.zuzaser.advanceddiary.model.Location
-import com.zuzaser.advanceddiary.repository.DiaryRepository
 import com.zuzaser.advanceddiary.util.UriPathFinder
+import com.zuzaser.advanceddiary.viewmodel.DiaryViewModel
 import kotlin.random.Random
 
 class DiaryEntryCreateView {
     @Composable
-    fun GetView(diaryRepository: DiaryRepository, onFinish: () -> Unit) {
+    fun GetView(diaryViewModel: DiaryViewModel, onFinish: () -> Unit) {
         var imageData = remember { mutableStateOf<List<Uri>>(emptyList()) }
-        val multiplePhotoPicker  =
-            rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)) {
-
-                imageData.value += it
-            }
+        val multiplePhotoPicker = rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)) { imageData.value += it }
         val scrollState = rememberScrollState()
         Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally) {
-
             ExpandableText(content = {
                 Button(onClick = {
                     multiplePhotoPicker.launch(
@@ -82,7 +73,7 @@ class DiaryEntryCreateView {
                     i += UriPathFinder().getPath(LocalContext.current, j)!!
                 }
                 Button(onClick = {
-                    diaryRepository.addDiaryEntry(DiaryEntryModel(Random.nextInt(1024 * 10), it.value, i.toString(), Location(0.0, 0.0)))
+                    diaryViewModel.addEntry(DiaryEntryModel(Random.nextInt(1024 * 10), it.value, i.toString(), Location(0.0, 0.0)))
                     onFinish()
                 }, content = { Text(text = "Finish")
                 })
@@ -92,29 +83,25 @@ class DiaryEntryCreateView {
 
     //stolen
     @Composable
-    fun ExpandableText(modifier: Modifier = Modifier, text: String = "", content: @Composable (textData: MutableState<String>) -> Unit) {
+    fun ExpandableText(modifier: Modifier = Modifier, content: @Composable (textData: MutableState<String>) -> Unit) {
         Column(Modifier.fillMaxSize(), horizontalAlignment =
         Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             var textData = remember { mutableStateOf("") }
             var showMore = remember { mutableStateOf(false) }
             Column(modifier = Modifier.padding(20.dp)) {
-
-                // Creating a clickable modifier that consists text
                 Column(modifier = Modifier
                     .animateContentSize(animationSpec = tween(100))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { showMore.value = !showMore.value }) {
-
-                    // if showMore is true, the Text will expand
-                    // Else Text will be restricted to 3 Lines of display
                     if (showMore.value) {
                         TextField(
                             textData.value,
                             {textData.value = it},
                             textStyle = TextStyle(fontSize =  28.sp),
-                            placeholder = { Text("Entry text here...") }
+                            placeholder = { Text("Entry text here...") },
+                            modifier = modifier
                         )
                     } else {
                         TextField(

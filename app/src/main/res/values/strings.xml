@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AdvancedDiary</string>
+    <string name="title_activity_diary_maps">DiaryMapsActivity</string>
 </resources>
